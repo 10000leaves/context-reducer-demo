@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { createContext, useReducer } from "react";
+import ComponentA from "./ComponentA";
+
+export const UserCount = createContext();
+
+const initialState = {
+  count: 2,
+};
+
+const reducer = (state, action) => {
+  switch (action) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    case "DECREMENT":
+      return { count: state.count - 1 };
+    case "RESET":
+      return { count: 0 };
+    default:
+      return state;
+  }
+};
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center" }}>
+      <h1>Learn useContext</h1>
+      <h2>カウント: {state.count}</h2>
+      <button onClick={() => dispatch("INCREMENT")}>+</button>
+      <button onClick={() => dispatch("DECREMENT")}>-</button>
+      <button onClick={() => dispatch("RESET")}>0</button>
+      <p>以下useContext </p>
+      <UserCount.Provider value={state.count}>
+        <ComponentA />
+      </UserCount.Provider>
     </div>
   );
 }
